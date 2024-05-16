@@ -50,7 +50,7 @@ afterEvaluate {
 
                 groupId = "com.github.chandroidx"
                 artifactId = "BottomSheetNavigator"
-                version = "1.0.2"
+                version = "1.0.3"
             }
 
             register("debug", MavenPublication::class) {
@@ -58,7 +58,7 @@ afterEvaluate {
 
                 groupId = "com.github.chandroidx"
                 artifactId = "BottomSheetNavigator"
-                version = "1.0.2"
+                version = "1.0.3"
             }
         }
     }
