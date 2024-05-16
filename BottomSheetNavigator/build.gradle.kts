@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id(libs.plugins.mavenPublish.get().pluginId)
+    `maven-publish`
 }
 
 android {
@@ -50,7 +50,7 @@ afterEvaluate {
 
                 groupId = "com.github.chandroidx"
                 artifactId = "BottomSheetNavigator"
-                version = "1.0.4"
+                version = "1.0.5"
             }
 
             register("debug", MavenPublication::class) {
@@ -58,7 +58,7 @@ afterEvaluate {
 
                 groupId = "com.github.chandroidx"
                 artifactId = "BottomSheetNavigator"
-                version = "1.0.4"
+                version = "1.0.5"
             }
         }
     }
