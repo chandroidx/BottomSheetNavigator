@@ -16,6 +16,7 @@
 
 package com.chandroidx.bottomsheetnavigator
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.compose.material.contentColorFor
@@ -32,7 +33,7 @@ import androidx.compose.ui.unit.Dp
  */
 
 @Composable
-public fun ModalBottomSheetLayout(
+fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,
     modifier: Modifier = Modifier,
     sheetShape: Shape = MaterialTheme.shapes.large,
