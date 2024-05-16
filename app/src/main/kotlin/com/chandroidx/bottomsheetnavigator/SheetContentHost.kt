@@ -17,7 +17,6 @@
 package com.chandroidx.bottomsheetnavigator
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,8 +41,6 @@ import kotlinx.coroutines.flow.drop
  * @param onSheetDismissed Callback when the sheet has been dismissed. Typically, you'll want to
  * pop the back stack here.
  */
-@ExperimentalMaterialNavigationApi
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun ColumnScope.SheetContentHost(
     backStackEntry: NavBackStackEntry?,
@@ -70,7 +67,6 @@ internal fun ColumnScope.SheetContentHost(
                 }
         }
         backStackEntry.LocalOwnersProvider(saveableStateHolder) {
-            @Suppress("DEPRECATION")
             val content = (backStackEntry.destination as BottomSheetNavigator.Destination).content
             content(backStackEntry)
         }

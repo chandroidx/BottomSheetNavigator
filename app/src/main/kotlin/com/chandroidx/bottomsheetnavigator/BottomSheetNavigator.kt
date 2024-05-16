@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
-
 package com.chandroidx.bottomsheetnavigator
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
@@ -54,14 +50,6 @@ import kotlinx.coroutines.flow.transform
  *
  * @param sheetState The sheet state that is driven by the [BottomSheetNavigator]
  */
-@Deprecated(
-    "Migrate to Androidx compose.material.navigation BottomSheetNavigatorSheetState " +
-            "with the same parameters. To migrate, change import from " +
-            "com.chandroidx.bottomsheetnavigator.BottomSheetNavigatorSheetState to " +
-            "androidx.compose.material.navigation.BottomSheetNavigatorSheetState."
-)
-@ExperimentalMaterialNavigationApi
-@OptIn(ExperimentalMaterialApi::class)
 @Stable
 public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottomSheetState) {
     /**
@@ -86,14 +74,6 @@ public class BottomSheetNavigatorSheetState(internal val sheetState: ModalBottom
 /**
  * Create and remember a [BottomSheetNavigator]
  */
-@Deprecated(
-    "Migrate to Androidx compose.material.navigation rememberBottomSheetNavigator " +
-            "with the same parameters. To migrate, change import from " +
-            "com.chandroidx.bottomsheetnavigator.rememberBottomSheetNavigator to " +
-            "androidx.compose.material.navigation.rememberBottomSheetNavigator."
-)
-@ExperimentalMaterialNavigationApi
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 public fun rememberBottomSheetNavigator(
     animationSpec: AnimationSpec<Float> = SpringSpec<Float>()
@@ -124,14 +104,6 @@ public fun rememberBottomSheetNavigator(
  * @param sheetState The [ModalBottomSheetState] that the [BottomSheetNavigator] will use to
  * drive the sheet state
  */
-@Deprecated(
-    "Migrate to Androidx compose.material.navigation BottomSheetNavigator " +
-            "with the same parameters. To migrate, change import from " +
-            "com.chandroidx.bottomsheetnavigator.BottomSheetNavigator to " +
-            "androidx.compose.material.navigation.BottomSheetNavigator."
-)
-@ExperimentalMaterialNavigationApi
-@OptIn(ExperimentalMaterialApi::class)
 @Navigator.Name("BottomSheetNavigator")
 public class BottomSheetNavigator(
     internal val sheetState: ModalBottomSheetState
@@ -166,7 +138,8 @@ public class BottomSheetNavigator(
     /**
      * Access properties of the [ModalBottomSheetLayout]'s [ModalBottomSheetState]
      */
-    public val navigatorSheetState: BottomSheetNavigatorSheetState = BottomSheetNavigatorSheetState(sheetState)
+    public val navigatorSheetState: BottomSheetNavigatorSheetState =
+        BottomSheetNavigatorSheetState(sheetState)
 
     /**
      * A [Composable] function that hosts the current sheet content. This should be set as
@@ -246,14 +219,22 @@ public class BottomSheetNavigator(
         content = {}
     )
 
-    @SuppressLint("NewApi") // b/187418647
     override fun navigate(
         entries: List<NavBackStackEntry>,
         navOptions: NavOptions?,
         navigatorExtras: Extras?
     ) {
         entries.forEach { entry ->
-            state.pushWithTransition(entry)
+            val alreadyHasRoute = state.backStack.value.any {
+                it.destination.route == entry.destination.route
+            }
+
+            if (!alreadyHasRoute) {
+                state.pushWithTransition(entry)
+            } else {
+                state.markTransitionComplete(state.backStack.value.first())
+                state.pop(state.backStack.value.first(), false)
+            }
         }
     }
 

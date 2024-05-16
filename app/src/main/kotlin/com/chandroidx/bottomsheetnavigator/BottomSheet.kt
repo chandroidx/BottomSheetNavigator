@@ -16,7 +16,6 @@
 
 package com.chandroidx.bottomsheetnavigator
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.compose.material.contentColorFor
@@ -31,15 +30,7 @@ import androidx.compose.ui.unit.Dp
  *
  * @see [ModalBottomSheetLayout]
  */
-@Deprecated(
-    "Migrate to Androidx compose.material.navigation ModalBottomSheetLayout with the same " +
-            "parameters. To migrate, change import from " +
-            "com.chandroidx.bottomsheetnavigator.ModalBottomSheetLayout to " +
-            "androidx.compose.material.navigation.ModalBottomSheetLayout."
-)
-@ExperimentalMaterialNavigationApi
-@OptIn(ExperimentalMaterialApi::class)
-@Suppress("DEPRECATION")
+
 @Composable
 public fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,
