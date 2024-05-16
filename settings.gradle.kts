@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "BottomSheetNavigator"
-include(":app")
+include(":BottomSheetNavigator")
  

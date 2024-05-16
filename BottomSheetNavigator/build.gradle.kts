@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id(libs.plugins.mavenPublish.get().pluginId)
 }
 
 android {
@@ -36,4 +37,26 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.ui)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            register("release", MavenPublication::class) {
+                from(components["release"])
+
+                groupId = "com.github.chandroidx"
+                artifactId = "BottomSheetNavigator"
+                version = "1.0.0"
+            }
+
+            register("debug", MavenPublication::class) {
+                from(components["debug"])
+
+                groupId = "com.github.chandroidx"
+                artifactId = "BottomSheetNavigator"
+                version = "1.0.0"
+            }
+        }
+    }
 }
