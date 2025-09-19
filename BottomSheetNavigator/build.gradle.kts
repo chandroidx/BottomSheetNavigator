@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "com.chandroidx.bottomsheetnavigator"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
     }
 
     buildTypes {
@@ -26,12 +26,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.12"
 }
 
 dependencies {
@@ -50,7 +46,7 @@ afterEvaluate {
 
                 groupId = "com.github.chandroidx"
                 artifactId = "BottomSheetNavigator"
-                version = "1.0.5"
+                version = "1.1.0"
             }
 
             register("debug", MavenPublication::class) {
@@ -58,7 +54,7 @@ afterEvaluate {
 
                 groupId = "com.github.chandroidx"
                 artifactId = "BottomSheetNavigator"
-                version = "1.0.5"
+                version = "1.1.0"
             }
         }
     }

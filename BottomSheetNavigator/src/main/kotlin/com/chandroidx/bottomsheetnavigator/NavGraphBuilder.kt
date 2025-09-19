@@ -21,8 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
+import androidx.navigation.NavDestinationBuilder
+import androidx.navigation.NavDestinationDsl
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.get
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 /**
  * Add the [content] [Composable] as bottom sheet content to the [NavGraphBuilder]
@@ -33,23 +38,77 @@ import androidx.navigation.get
  * @param content the sheet content at the given destination
  */
 fun NavGraphBuilder.bottomSheet(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    deepLinks: List<NavDeepLink> = emptyList(),
-    content: @Composable ColumnScope.(backstackEntry: NavBackStackEntry) -> Unit
+  route: String,
+  arguments: List<NamedNavArgument> = emptyList(),
+  deepLinks: List<NavDeepLink> = emptyList(),
+  content: @Composable ColumnScope.(backstackEntry: NavBackStackEntry) -> Unit
 ) {
-    addDestination(
-        BottomSheetNavigator.Destination(
-            provider[BottomSheetNavigator::class],
-            content
-        ).apply {
-            this.route = route
-            arguments.forEach { (argumentName, argument) ->
-                addArgument(argumentName, argument)
-            }
-            deepLinks.forEach { deepLink ->
-                addDeepLink(deepLink)
-            }
-        }
+  addDestination(
+    BottomSheetNavigator.Destination(
+      provider[BottomSheetNavigator::class],
+      content
+    ).apply {
+      this.route = route
+      arguments.forEach { (argumentName, argument) ->
+        addArgument(argumentName, argument)
+      }
+      deepLinks.forEach { deepLink ->
+        addDeepLink(deepLink)
+      }
+    }
+  )
+}
+
+inline fun <reified T : Any> NavGraphBuilder.bottomSheet(
+  typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = emptyMap(),
+  deepLinks: List<NavDeepLink> = emptyList(),
+  noinline content: @Composable ColumnScope.(backstackEntry: NavBackStackEntry) -> Unit
+) {
+  destination(
+    BottomSheetNavigatorDestinationBuilder(
+      provider[BottomSheetNavigator::class],
+      T::class,
+      typeMap,
+      content
     )
+      .apply {
+        deepLinks.forEach { deepLink -> deepLink(deepLink) }
+      }
+  )
+}
+
+/** DSL for constructing a new [ComposeNavigator.Destination] */
+@NavDestinationDsl
+class BottomSheetNavigatorDestinationBuilder :
+  NavDestinationBuilder<BottomSheetNavigator.Destination> {
+
+  private val composeNavigator: BottomSheetNavigator
+  private val content: @Composable ColumnScope.(NavBackStackEntry) -> Unit
+
+  constructor(
+    navigator: BottomSheetNavigator,
+    route: String,
+    content: @Composable ColumnScope.(NavBackStackEntry) -> Unit
+  ) : super(navigator, route) {
+    this.composeNavigator = navigator
+    this.content = content
+  }
+
+  constructor(
+    navigator: BottomSheetNavigator,
+    route: KClass<*>,
+    typeMap: Map<KType, @JvmSuppressWildcards NavType<*>>,
+    content: @Composable ColumnScope.(NavBackStackEntry) -> Unit
+  ) : super(navigator, route, typeMap) {
+    this.composeNavigator = navigator
+    this.content = content
+  }
+
+  override fun instantiateDestination(): BottomSheetNavigator.Destination {
+    return BottomSheetNavigator.Destination(composeNavigator, content)
+  }
+
+  override fun build(): BottomSheetNavigator.Destination {
+    return super.build()
+  }
 }
